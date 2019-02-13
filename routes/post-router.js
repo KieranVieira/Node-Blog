@@ -67,4 +67,35 @@ router.post('/', (req, res) => {
     }
 });
 
+router.put('/:id', (req, res) => {
+    const postId = req.params.id;
+    const postData = req.body;
+    try {
+        db
+        .update(postId, postData)
+        .then(post => {
+            if(post){
+                res.status(201).json({
+                    message: "Post was updated"
+                })
+            }else{
+                res.status(404).json({
+                    message: "Post was not found",
+                })
+            }
+        })
+        .catch(error => {
+            res.status(400).json({
+                message: "Bad request, provide required field (text)",
+                error
+            })
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Server could not put to the database"
+        })
+    }
+
+});
+
 module.exports = router;
