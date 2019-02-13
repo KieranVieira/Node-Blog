@@ -36,6 +36,27 @@ router.get('/', (req, res) => {
         })
 });
 
+router.get('/:id', (req, res) => {
+    const userId = req.params.id;
+
+    db.getById(userId)
+        .then(user => {
+            if(user){
+                res.status(200).json(user)
+            }else{
+                res.status(404).json({
+                    message: "Can't find user with given ID"
+                })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "Server could not find user.",
+                error
+            })
+        })
+});
+
 router.put('/:id', (req, res) => {
     const userId = req.params.id;
     const userInfo = req.body;
@@ -68,25 +89,46 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
     const userId = req.params.id;
-        db.remove(userId)
-            .then(user => {
-                console.log(user)
-                if(user){
-                    res.status(200).json({
-                        message: "User was deleted"
-                    }) 
-                }else{
-                    res.status(404).json({
-                        message: "No user found with this ID"
-                    })
-                }
-            })
-            .catch(error => {
-                res.status(500).json({
-                    message: "Server could not delete the user",
-                    error
+    db.remove(userId)
+        .then(user => {
+            console.log(user)
+            if(user){
+                res.status(200).json({
+                    message: "User was deleted"
+                }) 
+            }else{
+                res.status(404).json({
+                    message: "No user found with this ID"
                 })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "Server could not delete the user",
+                error
             })
+        })
+});
+
+router.get('/:id/posts', (req, res) => {
+    const userId = req.params.id;
+    db
+        .getUserPosts(userId)
+        .then(posts => {
+            if(posts.length > 0){
+                res.status(200).json(posts)
+            }else{
+                res.status(404).json({
+                    message: "Could not find any posts for this user"
+                })
+            }
+        })
+        .catch(error => {
+            res.send(500).json({
+                message: "Server could not retrieve user posts",
+                error
+            })
+        })
 });
 
 module.exports = router;
