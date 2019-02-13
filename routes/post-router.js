@@ -23,4 +23,26 @@ router.get('/', (req, res) => {
         })
 });
 
+router.get('/:id', (req, res) => {
+    const postId = req.params.id;
+
+    db
+        .getById(postId)
+        .then(post => {
+            if(post){
+                res.status(200).json(post)
+            }else{
+                res.status(404).json({
+                    message: "No post found with this ID"
+                })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "Server could not retrieve this post",
+                error
+            })
+        })
+});
+
 module.exports = router;
