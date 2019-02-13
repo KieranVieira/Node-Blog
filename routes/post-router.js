@@ -3,6 +3,28 @@ const db = require('../data/helpers/postDb')
 
 const router = express.Router();
 
+router.post('/', (req, res) => {
+    const post = req.body;
+    try {
+        db
+            .insert(post)
+            .then(post => {
+                res.status(201).json(post)
+            })
+            .catch(error => {
+                res.status(400).json({
+                    message: "Please add the required fields(text and user_id)",
+                    error
+                })
+            })
+    } catch (error) {
+        res.status(500).json({
+            message: "Server could not post to the database",
+            error
+        })
+    }
+});
+
 router.get('/', (req, res) => {
     db
         .get()
@@ -43,28 +65,6 @@ router.get('/:id', (req, res) => {
                 error
             })
         })
-});
-
-router.post('/', (req, res) => {
-    const post = req.body;
-    try {
-        db
-            .insert(post)
-            .then(post => {
-                res.status(201).json(post)
-            })
-            .catch(error => {
-                res.status(400).json({
-                    message: "Please add the required fields(text and user_id)",
-                    error
-                })
-            })
-    } catch (error) {
-        res.status(500).json({
-            message: "Server could not post to the database",
-            error
-        })
-    }
 });
 
 router.put('/:id', (req, res) => {
