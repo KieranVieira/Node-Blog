@@ -36,5 +36,34 @@ router.get('/', (req, res) => {
         })
 });
 
+router.put('/:id', (req, res) => {
+    const userId = req.params.id;
+    const userInfo = req.body;
+    try {
+        db.update(userId, userInfo)
+        .then(user => {
+            if(user){
+                res.status(200).json({
+                    message: "User was updated",
+                    user
+                })
+            }else{
+                res.status(404).json({
+                    message: "Could not find user with this ID"
+                })
+            }
+        })
+        .catch(error => {
+            res.status(400).json({
+                message: "Bad request, please add the required name field",
+            })
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Server could not update user",
+            error
+        })
+    }
+});
 
 module.exports = router;
