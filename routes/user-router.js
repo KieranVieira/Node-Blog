@@ -1,9 +1,15 @@
 const express = require('express');
 const db = require('../data/helpers/userDb')
 
+function uppercaseUsername(req, res, next){
+    req.body.name = req.body.name.toUpperCase()
+
+    next();
+}
+
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/', uppercaseUsername, (req, res) => {
     const userData = req.body;
     try {
         db
@@ -57,7 +63,7 @@ router.get('/:id', (req, res) => {
         })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', uppercaseUsername, (req, res) => {
     const userId = req.params.id;
     const userInfo = req.body;
     try {
