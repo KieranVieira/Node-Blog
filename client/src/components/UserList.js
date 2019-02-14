@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const UserList = props => {
     return(
         props.users.map(user => {
-            return <h1>{user.name}</h1>
+            return <Link to={`/user/${user.id}`}>{user.name}</Link>
         })
     )
 }
