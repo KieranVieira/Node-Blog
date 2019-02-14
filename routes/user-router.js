@@ -2,9 +2,21 @@ const express = require('express');
 const db = require('../data/helpers/userDb')
 
 function uppercaseUsername(req, res, next){
-    req.body.name = req.body.name.toUpperCase()
+    if(req.body.name){
+        req.body.name = req.body.name.toUpperCase();
 
-    next();
+        // Following commented code is to only uppercase first letter
+        // let nameArray = req.body.name.split('')
+        // nameArray[0] = nameArray[0].toUpperCase()
+        // req.body.name = nameArray.join('')
+
+        next();
+    }
+    else{
+        res.status(400).json({
+            message: "Bad request, you must provide a name"
+        })
+    }
 }
 
 const router = express.Router();
