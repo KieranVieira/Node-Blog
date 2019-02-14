@@ -6,12 +6,12 @@ import { BrowserRouter as Router, withRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
-// import rootReducer from './store/reducers';
+import rootReducer from './store/reducers';
 
 import App from './App';
 
 const store = createStore(
-    () => {},
+    rootReducer,
     applyMiddleware(thunk, logger)
 )
 
